@@ -40,7 +40,7 @@ TransactionRoute.post(
 );
 
 TransactionRoute.get(
-  "/getNotification/: ",
+  "/getNotification/:testNotificationToken",
   appleClientMiddleware,
   getNotification
 );
