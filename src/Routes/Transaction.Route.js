@@ -22,7 +22,7 @@ TransactionRoute.get(
 );
 
 TransactionRoute.get(
-  "/SubscriptionStatuses/:transactionId",
+  "/SubscriptionStatus/:transactionId",
   appleClientMiddleware,
   getAllSubscriptionStatuses
 );
