@@ -217,6 +217,8 @@ const getAllSubscriptionStatuses = async (req, res) => {
     validateParams(req.params, ["transactionId"]);
     if (!req.appleJwt) throw new ApiError(401, "Missing Apple JWT");
 
+    console.log(req.appleJwt);
+    console.log(req.params.transactionId);
     const response = await makeAppleApiRequest(
       "get",
       `/inApps/v1/subscriptions/${req.params.transactionId}`,
@@ -228,6 +230,7 @@ const getAllSubscriptionStatuses = async (req, res) => {
     const data = response.data.data[0]?.lastTransactions[0]?.signedRenewalInfo;
     const decodedData = DecodeJWT(data);
 
+    console.log(decodedData);
     res.json(
       new ApiResponse(
         200,
@@ -236,8 +239,8 @@ const getAllSubscriptionStatuses = async (req, res) => {
       )
     );
   } catch (error) {
-    console.log(error)
-    res.status(500).json("Internal Server Error");
+    console.log(error);
+    res.status(error.status || 500).json(error.message);
   }
 };
 
