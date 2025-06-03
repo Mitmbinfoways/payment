@@ -223,6 +223,8 @@ const getAllSubscriptionStatuses = async (req, res) => {
       req.appleJwt
     );
 
+    console.log(response.data);
+
     const data = response.data.data[0]?.lastTransactions[0]?.signedRenewalInfo;
     const decodedData = DecodeJWT(data);
 
@@ -234,6 +236,7 @@ const getAllSubscriptionStatuses = async (req, res) => {
       )
     );
   } catch (error) {
+    console.log(error)
     res.status(error.status || 500).json(error);
   }
 };
