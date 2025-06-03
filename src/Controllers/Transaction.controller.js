@@ -219,25 +219,28 @@ const getAllSubscriptionStatuses = async (req, res) => {
 
     console.log(req.appleJwt);
     console.log(req.params.transactionId);
-    const response = await makeAppleApiRequest(
-      "get",
-      `/inApps/v1/subscriptions/${req.params.transactionId}`,
-      req.appleJwt
-    );
+    try {
+      const response = await makeAppleApiRequest(
+        "get",
+        `/inApps/v1/subscriptions/${req.params.transactionId}`,
+        req.appleJwt
+      );
+      console.log(response.data);
+      const data =
+        response.data.data[0]?.lastTransactions[0]?.signedRenewalInfo;
+      const decodedData = DecodeJWT(data);
 
-    console.log(response.data);
-
-    const data = response.data.data[0]?.lastTransactions[0]?.signedRenewalInfo;
-    const decodedData = DecodeJWT(data);
-
-    console.log(decodedData);
-    res.json(
-      new ApiResponse(
-        200,
-        decodedData,
-        "Subscription statuses fetched successfully"
-      )
-    );
+      console.log(decodedData);
+      res.json(
+        new ApiResponse(
+          200,
+          decodedData,
+          "Subscription statuses fetched successfully"
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
   } catch (error) {
     console.log(error);
     res.status(error.status || 500).json(error.message);
